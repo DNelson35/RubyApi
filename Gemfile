@@ -34,6 +34,12 @@ gem "sqlite3", "~> 1.4"
 # Require all files in a folder
 gem "require_all", "~> 3.0"
 
+# Runs enviorment in console with access to code
+gem "tux", "~> 0.3.0"
+
+# Generates random fake data 
+gem "faker", "~> 2.19"
+
 # These gems will only be used when we are running the application locally
 group :development do
   gem "pry", "~> 0.14.1"
@@ -50,3 +56,7 @@ group :test do
   gem "rspec", "~> 3.10"
   gem "rspec-json_expectations", "~> 2.2"
 end
+
+
+
+
