@@ -2,10 +2,10 @@
 class ApplicationController < Sinatra::Base
   set :default_content_type, 'application/json'
   
-  # this endpoint will get all compines with an added array of its drinks
+  # this endpoint will get all compines with an added array of its drinks  DONE
   get '/companies' do
     companies = Company.all
-    companies.to_json(include: :drinks)
+    companies.to_json(include: :drinks, methods: :drink_count)
   end
 
   # this endpoint will post a company with an empty array of drinks
@@ -33,6 +33,7 @@ class ApplicationController < Sinatra::Base
     company.to_json(include: :drinks)
   end
 
+  # post a drink to a company and return the drinks    DONE 
   post '/companies/:company_id/drinks' do
     company = Company.find(params[:company_id])
     new_drink = company.drinks.create(
