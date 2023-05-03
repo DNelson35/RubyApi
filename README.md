@@ -1,138 +1,100 @@
-# Phase 3 Project Guidelines
+# Ruby API
 
-## Learning Goals
+This Ruby Api is used to manage and provide data for a my react front-end application [here](https://github.com/DNelson35/phase-3-project). The application uses Sinatra and Active Record. All photos for the seed data in this application are sourced from the unsplash library [here](https://unsplash.com/)
 
-- Build a web basic API with Sinatra and Active Record to support a React
-  frontend
+## Sinatra
 
-## Introduction
+Since Sinatra inherits from Rack, Sinatra is allowing our application to receive http requests and send a response back. For this application Sinatra is making it easier to use and define `Get`, `Patch`, `Post`, `Put`, and `Delete` actions in the controller, as well as send back the response with the default header 'Content-Type: application/json'. To describe this when an fetch is made from the frontend to the server, rack is hosting our server at "https://localhost:9292" when the server receives the request from the frontend Sinatra will then take the endpoint and match it to an action inside the application controller. that action is then executed and a response is sent back to the frontend with the default header 'Content-Type: application/json'. Sinatra also provides us with the Params hash that allows us to use key/value pairs in the url, for example:
 
-Congrats on getting through all the material for Phase 3! Now's the time to put
-it all together and build something from scratch to reinforce what you know and
-expand your horizons.
-
-The focus of this project is **building a Sinatra API backend** that uses
-**Active Record** to access and persist data in a database, which will be used
-by a separate **React frontend** that interacts with the database via the API.
-
-## Requirements
-
-For this project, you must:
-
-- Use Active Record to interact with a database.
-- Have at least two models with a one-to-many relationship.
-- At a minimum, set up the following API routes in Sinatra:
-  - create and read actions for both models
-  - full CRUD capability for one of the models: 
-  The update action should be implemented using a form that is 
-  pre-filled with existing values for the object. On submission of 
-  the form, the object should update. Note: Using a like button or 
-  similar will not meet the update requirement.
-- Build a separate React frontend application that interacts with the API to
-  perform CRUD actions.
-- Implement proper front end state management. You should be updating state using a
-  setState function after receiving your response from a POST, PATCH, or DELETE 
-  request. You should NOT be relying on a GET request to update state. 
-- Use good OO design patterns. You should have separate classes for each of your
-  models, and create instance and class methods as necessary. 
-- Routes in your application (both client side and back end) should follow RESTful
-  conventions.
-- Use your back end optimally. Pass JSON for related associations to the front 
-  end from the back end. You should use active record methods in your controller to grab
-  the needed data from your database and provide as JSON to the front end. You
-  should NOT be relying on filtering front end state or a separate fetch request to
-  retrieve related data.
-
-For example, build a todo list application with a React frontend interface and a
-Sinatra backend API, where a user can:
-
-- **Create** a new todo
-- **Read** a list of all todos
-- **Update** an individual todo
-- **Delete** a todo
-
-A `Todo` can be tagged with a `Category`, so that each todo _belongs to_ a
-category and each category _has many_ todos.
-
-## Getting Started
-
-### Backend Setup
-
-This repository has all the starter code needed to get a Sinatra backend up and
-running. [**Fork and clone**][fork link] this repository to get started. Then, run
-`bundle install` to install the gems.
-
-**Important**: Be sure you fork a copy of the repo into your GitHub account
-before cloning it. You can do this by using the link above or by clicking the
-"Octocat" button at the top of this page, then clicking "Fork" in the upper
-right corner of the repo page.
-
-[fork link]: https://github.com/learn-co-curriculum/phase-3-sinatra-react-project/fork
-
-The `app/controllers/application_controller.rb` file has an example GET route
-handler. Replace this route with routes for your project.
-
-You can start your server with:
-
-```console
-$ bundle exec rake server
+```ruby
+  delete '/companies/:company_id/drinks/:id' do
+    company = Company.find(params[:company_id])
+    drink = company.drinks.find(params[:id])
+    drink.destroy
+  end
 ```
 
-This will run your server on port
-[http://localhost:9292](http://localhost:9292).
+in this example params will be a hash containing the keys of company_id and id so if our server receives a request to this action like this "http://localhost:9292/companies/1/drinks/2" then sinatra will pass /companies/1/drinks/2 to the action that matches the URI and the Method sent in the request. In this case if the Fetch sent a Delete request to this url then the delete action will be executed and params will look like this:
 
-### Frontend Setup
-
-Your backend and your frontend should be in **two different repositories**.
-
-Create a new repository in a **separate folder** with a React app for your
-frontend. To do this, `cd` out of the backend project directory, and use
-[create-react-app][] to generate the necessary code for your React frontend:
-
-```console
-$ npx create-react-app my-app-frontend
+```ruby
+{
+  "company_id": "1",
+  "id": "2"
+}
 ```
 
-After creating the project locally, you should also
-[create a repository on GitHub][create repo] to host your repo and help
-collaborate, if you're working with a partner.
+When the the action is executed `params[:company_id]` will be 1 and `params[:id]` will be 2. The find will then look for a company with the ID of 1 and and a drink related to the company with the ID of 2. the company.drink will then be set to drink variable and drink.destroy will delete the record.
 
-### Fetch Example
+## Active Record
 
-Your React app should make fetch requests to your Sinatra backend! Here's an
-example:
+Active Record is a Ruby gem that provides an Object-Relational Mapping (ORM) framework for our application. It simplifies the task of communicating with the database by allowing us to interact with the database using Ruby objects. In this application, we use Active Record to define the structure and relationships of our database tables.
 
-```js
-fetch("http://localhost:9292/test")
-  .then((r) => r.json())
-  .then((data) => console.log(data));
+Active Record provides several features that make it easier to work with our database, including:
+
+### Migrations:
+
+ Active Record provides a simple way to define changes to our database schema over time, allowing us to easily create and modify database tables, columns, and relationships. In this application we use migrations to create both the companies and drinks tables. 
+
+### Associations:
+
+ Active Record allows us to define associations between our database tables, such as one-to-one, one-to-many, and many-to-many relationships. These associations make it easier to fetch and manipulate related records in our application. For this application we have a one-to-many relationship between our database tables. Company has many Drinks.
+
+### Validations:
+
+ Active Record provides a set of validation helpers that allow us to define rules for how data should be stored in our database. These validations help ensure data integrity and prevent invalid data from being stored. Validations can be used to make sure data received meets certain requirements.
+
+### Query interface:
+ Active Record provides a simple and powerful query interface for interacting with our database. This interface allows us to fetch records based on specific criteria, and provides a wide range of options for sorting, filtering, and aggregating data. some of the methods provided in this application are `all`, `find`, `create`, and `destroy`. There are many more methods provided by Active Record for more information click [here](https://guides.rubyonrails.org/active_record_querying.html) 
+
+In this application, we use Active Record to define the schema and associations for our companies and drinks tables, and to perform queries and updates to the database. Active record allows us to write cleaner more abstracted code that is easier to read and write for managing and retrieving data from our database.
+
+# How it works
+
+## config folder
+The config folder contains two files the database.yml and the environment.rb files. 
+
+### database.yml
+The database.yml file is used to define the database configurations for different environments (such as development, test, production). 
+
+### environment.rb
+the environment file sets RACK_ENV to development by default. Then uses Bundler.require to get all the gems from the gem folder as well as the development group. one of these gems is The sinatra-activerecord gem which loads the database.yml file that sets up the database connection settings. which in this case is development. Next the environment file brings in all files inside the app folder. which will be the controller and  the models
+
+## Config.ru file
+the config.ru file is used to first to brink it all the environment file then Allow CORS (Cross-Origin Resource Sharing) requests and specifies which request we allow and where we allow the request to come from. Next we use Rack::JSONBodyParser to parse the body of the request so that we can use the json data from the request and example would be: 
+
+```ruby
+ post '/companies' do
+    new_company = Company.create(
+      name: params[:name], # => the params[:name], :name comes from the body of the request
+      logo_url: params[:logo_url]
+    )
+    new_company.to_json(include: :drinks)
+  end
 ```
 
-## Project Tips
+This allows us to pull information from the body of the request using the keys from the json object.
 
-- This project is intended to focus more on the backend than the frontend, so
-  try and keep the React side of things relatively simple. Focus on working with
-  Active Record and performing CRUD actions. What are some interesting queries you can write? What kinds of questions can you ask of your data?
-- Once you have a project idea, come up with a domain model and decide what
-  relationships exist between the models in your application. Use a tool like
-  [dbdiagram.io][] to help visualize your models.
-- Decide on your API endpoints. What data should they return? What kind of CRUD
-  action should they perform? What data do they need from the client?
-- Use [Postman][postman download] to test your endpoints.
-- Use `binding.pry` to debug your requests on the server. It's very helpful to use a
-  `binding.pry` in your controller within a route to see what `params` are being
-  sent.
-- Use the [Network Tab in the Dev Tools][network tab] in the frontend to debug
-  your requests.
+Then finally for the config.ru file we run the ApplicationController which gives us access to the actions and logic used inside the ApplicationController and tells Rack to use this as the point for handling request.
 
-## Resources
+## Rakefile
 
-- [create-react-app][]
-- [dbdiagram.io][]
-- [Postman][postman download]
+In the Rakefile we require_relative "./config/environment" and
+require "sinatra/activerecord/rake". the relative file is our environment file which sets our environment by default to development, brings in all dependencies as well as the dependency group under development, and application files. While the  require adds several Rake tasks to your application that make it easy to manage database schema changes and perform common database operations such as seeding data or resetting the database. Inside the Rakefile we define some rake tasks.
 
-[create-react-app]: https://create-react-app.dev/docs/getting-started
-[create repo]: https://docs.github.com/en/get-started/quickstart/create-a-repo
-[dbdiagram.io]: https://dbdiagram.io/
-[postman download]: https://www.postman.com/downloads/
-[network tab]: https://developer.chrome.com/docs/devtools/network/
+### Rake
+
+Rake is a build automation tool for Ruby that provides a domain-specific language (DSL) for defining and running tasks. Rake tasks can be used to automate common development tasks such as running tests, deploying code, or managing database migrations.
+
+### server task
+
+Inside the server task we first check if the database has any pending migrations if it does a message is put to the console and the task exits. if no pending migrations exist then ENV["PORT"] is set to 9292 if the Port environment variable hasn't been set to a different value. then the variable rackup is set to rackup = "rackup -p #{ENV['PORT']}" which is used to run the config.ru file that runs the sever the sever will be ran at the port specified before. The next line then executes  "bundle exec rerun -b '#{rackup}'" which will run the server at the port specified and any time a file is changed the server will be restarted. 
+
+### console task
+
+Inside the console task we set the logger for Active Record to a new instance of the Logger class that logs to standard output (STDOUT). This will cause Active Record to output SQL statements and other debugging information to the console. then we start the console using the Pry gem. By starting a console with Pry, we can interact with your application's database using the Active Record ORM and run Ruby code to explore and manipulate the data.
+
+# Putting it simply
+
+When a request is made to the application, the Rack server is instructed to use the application controller to handle the request, thanks to the configuration in the config.ru file. The application controller is contained within the app directory, which is required by the environment file, giving the config.ru and Rakefile access to it. When the Rack server is started with rackup, it sets up both the server and the database, as specified in the environment file.
+
+When the request from the frontend arrives, the application controller identifies the corresponding action to run. It then accesses the necessary data by using classes from the models directory, which have been granted access to the data through ActiveRecord::Base. This means that the application controller does not access the database directly, but rather through the models. Once the data has been retrieved, it can be processed and returned to the frontend as a response.
