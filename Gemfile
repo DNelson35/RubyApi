@@ -40,6 +40,8 @@ gem "tux", "~> 0.3.0"
 # Generates random fake data 
 gem "faker", "~> 2.19"
 
+gem "byebug"
+
 # These gems will only be used when we are running the application locally
 group :development do
   gem "pry", "~> 0.14.1"

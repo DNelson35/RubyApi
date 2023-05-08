@@ -4,6 +4,12 @@ puts "🌱 Seeding spices..."
 
   coca_cola = Company.create(name: "Coca Cola", logo_url: "https://us.coca-cola.com/content/dam/nagbrands/us/coke/en/participating-brands/logo_coke.jpg")
 
+  monster = Company.create(name: "Monster", logo_url: "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bW9uc3RlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60")
+
+  pepsi = Company.create(name: "Pepsi", logo_url: "https://images.unsplash.com/photo-1533128555367-24f2584e23d7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTN8fHBlcHNpfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60")
+
+  nestle = Company.create(name: 'Nestle', logo_url: "https://images.unsplash.com/photo-1632054010678-7f2e5a1a7355?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bmVzdGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60")
+
   coke_drinks = [
     {
         name: "Fanta", 
@@ -22,11 +28,49 @@ puts "🌱 Seeding spices..."
     }
   ]
 
-  coke_drinks.each do |drink|
+  monster_drinks = [
+    {
+      name: "Energy", 
+      description: "Monsters original flavor",
+      image_url: "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bW9uc3RlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
+    },
+    {
+      name: "Nebuina Mango",
+      description: "good flavor great energy!",
+      image_url: "https://images.unsplash.com/photo-1588180891305-0e6de022e52d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bW9uc3RlciUyMGVuZXJneXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
+    }
+  ]
 
-    coca_cola.drinks.create(name: drink[:name], description: drink[:description], image_url: drink[:image_url])
+  pepsi_drinks = [
+    {
+      name: "Pepsi",
+      description: "on par with coke",
+      image_url: "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGVwc2l8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
+    }
+  ]
 
+  nestles_drinks = [
+    {
+      name: "Nescafe",
+      description: "never had it",
+      image_url: "https://images.unsplash.com/photo-1632054010678-7f2e5a1a7355?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bmVzdGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
+    }
+  ]
+
+  def seed(drinks , company)
+    drinks.each do |drink|
+
+      company.drinks.create(name: drink[:name], description: drink[:description], image_url: drink[:image_url])
+
+    end
   end
+
+  seed(coke_drinks, coca_cola)
+  seed(monster_drinks, monster)
+  seed(pepsi_drinks, pepsi)
+  seed(nestles_drinks, nestle)
+
+
 
 
 puts "✅ Done seeding!"
